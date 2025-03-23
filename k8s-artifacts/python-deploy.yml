@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pythonapp
+  labels:
+    app: loginapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: loginapp
+  template:
+    metadata:
+      labels:
+        app: loginapp
+    spec:
+      volumes:
+      - name: python-app-vm
+        configMap:
+          name: python-config
+      
+      containers:
+      - name: loginapp
+        image: 707928972753.dkr.ecr.eu-west-1.amazonaws.com/python3-techbleat:v4
+        volumeMounts:
+         - name: python-app-vm
+           mountPath: /config/.env
+           subPath: .env
+        ports:
+        - containerPort: 8000

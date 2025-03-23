@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx2
+  template:
+    metadata:
+      labels:
+        app: nginx2
+        day: sunday
+    spec:
+      volumes:
+        - name: html-content
+          configMap:
+            name: nginx-config
+      containers:
+      - name: nginx
+        image: nginx:1.14.2
+        volumeMounts:
+          - name: html-content
+            mountPath: /usr/share/nginx/html/index.html
+            subPath: index.html
+        ports:
+        - containerPort: 80
